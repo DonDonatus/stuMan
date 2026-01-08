@@ -4,18 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch server.js",
+    "build": "tsx build server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "better-sqlite3": "^12.5.0",
     "dotenv": "^17.2.3",
     "groq-sdk": "^0.37.0",
     "node-cron": "^4.2.1",
     "qrcode-terminal": "^0.12.0",
+    "tsx": "^4.21.0",
     "whatsapp-web.js": "^1.34.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }

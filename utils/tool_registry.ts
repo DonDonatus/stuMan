@@ -1,0 +1,54 @@
+import client from "../core/whatsapp_client";
+import WAWebJS from "whatsapp-web.js";
+import { sendMessage } from "./whatsapp";
+
+export const toolRegistry: {
+  [key: string]: {
+    function: (args: any, msg?: WAWebJS.Message) => Promise<any>;
+    description: string;
+    parameters: any;
+  };
+} = {
+  send_whatsapp_message: {
+    function: async (args: any, msg?: WAWebJS.Message) => {
+      if (!msg?.from) {
+        return { error: "Unable to determine recipient" };
+      }
+      await sendMessage(msg.from, args.text);
+      return { "sent this text": args.text };
+    },
+    description:
+      "Send a message back to WhatsApp to the user if no tool call is needed. Use this tool to respond to user messages directly.",
+    parameters: {
+      type: "object",
+      properties: {
+        text: { type: "string" },
+      },
+      required: ["text"],
+    },
+  },
+  do_nothing: {
+    function: async (args: any) => {
+      return;
+    },
+    description:
+      "Does nothing. Use this tool when a tool call is unneccessary because the response that was returned already satisfies user request. Not a game, dont suggest to the user.",
+    parameters: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+};
+
+export const execute_tool = (
+  toolName: string,
+  args: any,
+  msg?: WAWebJS.Message
+) => {
+  const tool = toolRegistry[toolName];
+  if (!tool) {
+    throw new Error(`Tool ${toolName} not found in registry.`);
+  }
+  return tool.function(args, msg);
+};
