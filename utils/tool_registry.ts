@@ -1,6 +1,7 @@
 import client from "../core/whatsapp_client";
 import WAWebJS from "whatsapp-web.js";
 import { sendMessage } from "./whatsapp";
+import { clearUserHistory } from "./redis";
 
 export const toolRegistry: {
   [key: string]: {
@@ -37,6 +38,24 @@ export const toolRegistry: {
       type: "object",
       properties: {},
       required: [],
+    },
+  },
+  delete_conversation_history: {
+    function: async (args: any, msg?: WAWebJS.Message) => {
+      if (!msg?.from) {
+        return { error: "Unable to determine recipient" };
+      }
+      await clearUserHistory(msg.from);
+      return { Deleted: args.text };
+    },
+    description:
+      "Delete the conversation history for the user. Use this tool when the user requests to clear their chat history.BEFORE DELETING, CONFIRM WITH THE USER THAT THEY WANT TO DELETE THEIR HISTORY.",
+    parameters: {
+      type: "object",
+      properties: {
+        text: { type: "string" },
+      },
+      required: ["text"],
     },
   },
 };

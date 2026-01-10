@@ -4,11 +4,8 @@ import { handle_tool } from "./tool_handler";
 
 export const handleIncomingMessage = () =>
   client.on("message", async (message) => {
-    console.log(" New message received from:", message.from);
     if (message.from === "233536287642@c.us") {
-      console.log(" Received message:", message.body);
-      const response = await handleMessageRequest(message.body);
-      console.log(" Generated response:", response?.choices[0]);
+      const response = await handleMessageRequest(message.from, message.body);
       await handle_tool(response, message);
       return response;
     }
