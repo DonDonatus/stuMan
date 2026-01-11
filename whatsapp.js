@@ -7,20 +7,21 @@ export function initializeWhatsApp() {
     console.log("\n Scan this QR code with WhatsApp:\n");
     qrcode.generate(qr, { small: true });
     console.log(
-      "\n📱 Open WhatsApp > Settings > Linked Devices > Link a Device\n"
+      "\n Open WhatsApp > Settings > Linked Devices > Link a Device\n"
     );
   });
 
+  // Event Listeners
   client.on("ready", () => {
-    console.log("WhatsApp Bot is ready!");
+    console.log("Event: WhatsApp Bot is ready!");
   });
 
   client.on("auth_failure", (msg) => {
-    console.error("Authentication failed:", msg);
+    console.error("Event: Authentication failed:", msg);
   });
 
   client.on("disconnected", (reason) => {
-    console.log("WhatsApp disconnected:", reason);
+    console.log("Event: WhatsApp disconnected:", reason);
   });
 
   client.initialize();

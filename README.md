@@ -1,0 +1,1 @@
+- [ ] add searching functionality, so that a user can say something like "find the conversation where my boss was telling me about the project workplan" and the system can search through previous conversations to find relevant information.
