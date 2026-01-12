@@ -1,6 +1,5 @@
 import { execute_tool } from "../utils/tool_registry";
 import WAWebJS from "whatsapp-web.js";
-import { sendMessage } from "../utils/whatsapp";
 
 export const handle_tool = async (response: any, msg?: WAWebJS.Message) => {
   const toolCalls = response?.choices?.[0]?.message?.tool_calls;
