@@ -38,6 +38,7 @@ export const handleMessageRequest = async (userId: string, message: string) => {
     const assistantResponse = response.choices[0].message;
     console.log("Assistant Response:", assistantResponse);
 
+    // If there is a function called delete... don't save the conversation otherwise the AI would still have context from before and keep using the previous.
     const deleteTool = assistantResponse.tool_calls?.find(
       (tc) => tc.function.name === "delete_conversation_history"
     );

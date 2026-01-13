@@ -19,7 +19,7 @@ export const createCourse = async (
 };
 
 export const addNoteToCourse = async (name: string, note: string) => {
-  const course = await courses.findOne({ code: name });
+  const course = await courses.findOne({ title: name });
   try {
     if (course) {
       course.notes.push(note);

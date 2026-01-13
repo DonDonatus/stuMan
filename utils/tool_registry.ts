@@ -60,6 +60,41 @@ export const toolRegistry: {
   },
 };
 
+export const JudgetoolRegistry: {
+  [key: string]: {
+    function: (args: any, msg?: WAWebJS.Message) => Promise<any>;
+    description: string;
+    parameters: any;
+  };
+} = {
+  task_complete: {
+    function: async () => {
+      const complete = true;
+      return complete;
+    },
+    description:
+      "Indicates that the assistant's response has satisfied the user's query.",
+    parameters: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+  task_incomplete: {
+    function: async () => {
+      const complete = false;
+      return complete;
+    },
+    description:
+      "Indicates that the assistant's response has NOT satisfied the user's query.",
+    parameters: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+};
+
 export const execute_tool = (
   toolName: string,
   args: any,
