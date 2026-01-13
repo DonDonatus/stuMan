@@ -106,3 +106,15 @@ export const execute_tool = (
   }
   return tool.function(args, msg);
 };
+
+export const execute_judge_tool = (
+  toolName: string,
+  args: any,
+  msg?: WAWebJS.Message
+) => {
+  const tool = JudgetoolRegistry[toolName];
+  if (!tool) {
+    throw new Error(`Tool ${toolName} not found in registry.`);
+  }
+  return tool.function(args, msg);
+};

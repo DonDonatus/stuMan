@@ -49,7 +49,6 @@ export const handleMessageRequest = async (userId: string, message: string) => {
     } else {
       console.log("conversation was cleared");
     }
-
     return response;
   } catch (error) {
     console.error("Groq API Error:", error);
