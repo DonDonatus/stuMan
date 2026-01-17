@@ -10,7 +10,7 @@ export const handle_tool = async (response: any, msg?: WAWebJS.Message) => {
     }
   } else {
     msg?.reply(
-      response.choices?.[0]?.message?.content || "Something went wrong"
+      response.choices?.[0]?.message?.content || "Something went wrong",
     );
     return null;
   }
@@ -18,7 +18,7 @@ export const handle_tool = async (response: any, msg?: WAWebJS.Message) => {
 
 export const handle_Judge_tool = async (
   response: any,
-  msg?: WAWebJS.Message
+  msg?: WAWebJS.Message,
 ) => {
   const toolCalls = response?.choices?.[0]?.message?.tool_calls;
   if (toolCalls && toolCalls.length > 0) {
@@ -28,7 +28,7 @@ export const handle_Judge_tool = async (
     }
   } else {
     msg?.reply(
-      response.choices?.[0]?.message?.content || "Something went wrong"
+      response.choices?.[0]?.message?.content || "Something went wrong",
     );
     return null;
   }

@@ -16,7 +16,7 @@ const tools = Object.entries(JudgetoolRegistry).map(([name, data]) => ({
 export const judge = async (userId: string) => {
   const userHistory = await getRedisUserHistory(userId);
   const response = await groq.chat.completions.create({
-    model: "openai/gpt-oss-20b",
+    model: "openai/gpt-oss-120b",
     messages: [{ role: "system", content: JUDGE_PROMPT }, ...userHistory],
     temperature: 0.2,
     max_tokens: 500,

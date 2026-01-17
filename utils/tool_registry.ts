@@ -15,17 +15,17 @@ export const toolRegistry: {
       if (!msg?.from) {
         return { error: "Unable to determine recipient" };
       }
-      await sendMessage(msg.from, args.text);
-      return { "sent this text": args.text };
+      await sendMessage(msg.from, args.message);
+      return { "sent this text": args.message };
     },
     description:
       "Send a message back to WhatsApp to the user if no tool call is needed. Use this tool to respond to user messages directly.",
     parameters: {
       type: "object",
       properties: {
-        text: { type: "string" },
+        message: { type: "string" },
       },
-      required: ["text"],
+      required: ["message"],
     },
   },
   do_nothing: {

@@ -3,10 +3,12 @@ import { handleMessageRequest } from "./groq_handler";
 import { handle_tool } from "./tool_handler";
 import { createUser, findUserByWhatsappId } from "../repository/user_repo";
 import { getJudgeTools, judge } from "../utils/judge";
+import { clearUserHistory } from "../utils/redis";
 
 export const handleIncomingMessage = () =>
   client.on("message", async (message) => {
     if (message.from === "233536287642@c.us") {
+      // await clearUserHistory(message.from);
       let complete = false;
       let finalResponse;
       while (!complete) {

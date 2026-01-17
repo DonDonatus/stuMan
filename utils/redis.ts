@@ -8,12 +8,14 @@ export async function getRedisUserHistory(userId: string) {
 export async function addNewMessageAndUpdateHistory(
   userId: string,
   userMsg: string,
-  assistantMsg: string
+  assistantMsg: string,
+  assistantRole: string,
+  toolCallId?: string,
 ) {
   const history = await getRedisUserHistory(userId);
   history.push(
     { role: "user", content: userMsg },
-    { role: "assistant", content: assistantMsg }
+    { role: assistantRole, content: assistantMsg, tool_call_id: toolCallId },
   );
 
   const recent = history.slice(-50);

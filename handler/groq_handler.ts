@@ -23,7 +23,7 @@ export const handleMessageRequest = async (userId: string, message: string) => {
   try {
     const userHistory = await getRedisUserHistory(userId);
     const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.1-8b-instant",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...userHistory,
@@ -40,12 +40,29 @@ export const handleMessageRequest = async (userId: string, message: string) => {
 
     // If there is a function called delete... don't save the conversation otherwise the AI would still have context from before and keep using the previous.
     const deleteTool = assistantResponse.tool_calls?.find(
-      (tc) => tc.function.name === "delete_conversation_history"
+      (tc) => tc.function.name === "delete_conversation_history",
     );
 
     if (!deleteTool) {
-      const assistantMessage = assistantResponse.content || "";
-      await addNewMessageAndUpdateHistory(userId, message, assistantMessage);
+      const assistantMessage =
+        assistantResponse.content ||
+        assistantResponse.tool_calls
+          ?.map((tc) => `${tc.function.name}(${tc.function.arguments})`)
+          .join(", ") ||
+        "";
+
+      const assistantRole = "assistant";
+
+      const toolCallId = assistantResponse.tool_calls
+        ? assistantResponse.tool_calls[0].id
+        : undefined;
+      await addNewMessageAndUpdateHistory(
+        userId,
+        message,
+        assistantMessage,
+        assistantRole,
+        toolCallId,
+      );
     } else {
       console.log("conversation was cleared");
     }
