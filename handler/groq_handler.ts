@@ -19,11 +19,15 @@ const tools = Object.entries(toolRegistry).map(([name, data]) => ({
   },
 }));
 
-export const handleMessageRequest = async (userId: string, message: string) => {
+export const handleMessageRequest = async (
+  userId: string,
+  message: string,
+  media?: string,
+) => {
   try {
     const userHistory = await getRedisUserHistory(userId);
     const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+      model: "meta-llama/llama-4-scout-17b-16e-instruct",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...userHistory,

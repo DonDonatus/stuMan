@@ -58,6 +58,23 @@ export const toolRegistry: {
       required: ["text"],
     },
   },
+  Get_course_Info: {
+    function: async (args: any, msg?: WAWebJS.Message) => {
+      if (!msg?.from) {
+        return { error: "Unable to determine recipient" };
+      }
+      await clearUserHistory(msg.from);
+      return { Deleted: args.text };
+    },
+    description: "Used to get information about a specific course.",
+    parameters: {
+      type: "object",
+      properties: {
+        text: { type: "string" },
+      },
+      required: ["text"],
+    },
+  },
 };
 
 export const JudgetoolRegistry: {
@@ -98,7 +115,7 @@ export const JudgetoolRegistry: {
 export const execute_tool = (
   toolName: string,
   args: any,
-  msg?: WAWebJS.Message
+  msg?: WAWebJS.Message,
 ) => {
   const tool = toolRegistry[toolName];
   if (!tool) {
@@ -110,7 +127,7 @@ export const execute_tool = (
 export const execute_judge_tool = (
   toolName: string,
   args: any,
-  msg?: WAWebJS.Message
+  msg?: WAWebJS.Message,
 ) => {
   const tool = JudgetoolRegistry[toolName];
   if (!tool) {

@@ -12,18 +12,37 @@ export const handleIncomingMessage = () =>
       let complete = false;
       let finalResponse;
       while (!complete) {
-        const response = await handleMessageRequest(message.from, message.body);
+        let messageBody;
+        if (message.hasMedia) {
+          const media = await message.downloadMedia();
+          messageBody = `${message.body}\n[Media attached: type: ${media.mimetype}, data: ${media.data}]`;
+        }
+
+        const response = await handleMessageRequest(
+          message.from,
+          messageBody || message.body,
+        );
         await handle_tool(response, message);
         const user = await findUserByWhatsappId(message.from);
         if (!user) {
           await createUser({ WhatsappId: message.from, Name: "unknown" });
         }
-        const judgeResponse = await judge(message.from);
-        const judgeToolCall = getJudgeTools(judgeResponse);
-        judgeToolCall === "task_complete"
-          ? (complete = true)
-          : (complete = false);
-        finalResponse = response;
+        const assistantMessage = response.choices?.[0]?.message;
+        const deleteTool =
+          assistantMessage && "tool_calls" in assistantMessage
+            ? assistantMessage.tool_calls?.find(
+                (tc: any) => tc.function.name === "delete_conversation_history",
+              )
+            : undefined;
+        if (deleteTool) {
+          complete = true;
+          finalResponse = response;
+        } else {
+          const judgeResponse = await judge(message.from);
+          const judgeToolCall = getJudgeTools(judgeResponse);
+          complete = judgeToolCall === "task_complete";
+          finalResponse = response;
+        }
       }
       return finalResponse;
     }
